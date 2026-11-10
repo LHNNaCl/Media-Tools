@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>媒体小工具 · UI 设计稿 02 极光</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1280px; height:800px; overflow:hidden; }
+  body {
+    font-family:"Microsoft YaHei UI","Microsoft YaHei","Segoe UI",sans-serif;
+    display:flex; background:#f2f3f9; color:#191c31;
+    -webkit-font-smoothing:antialiased;
+  }
+  svg { display:block; }
+
+  /* ============ 侧边栏 ============ */
+  .sidebar {
+    width:236px; height:800px; flex:none; position:relative; overflow:hidden;
+    background:linear-gradient(178deg,#12142a 0%,#191b3c 55%,#201f4e 100%);
+    display:flex; flex-direction:column;
+  }
+  .glow { position:absolute; border-radius:50%; pointer-events:none; }
+  .glow-a { width:340px; height:340px; top:-130px; left:-110px;
+    background:radial-gradient(closest-side,rgba(139,92,246,.38),transparent); }
+  .glow-b { width:320px; height:320px; bottom:-140px; right:-130px;
+    background:radial-gradient(closest-side,rgba(34,211,238,.22),transparent); }
+  .brand { position:relative; display:flex; align-items:center; gap:12px; padding:22px 20px 18px; }
+  .logo {
+    width:42px; height:42px; border-radius:13px; flex:none;
+    background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 52%,#22d3ee 115%);
+    box-shadow:0 6px 18px rgba(99,102,241,.5), inset 0 1px 0 rgba(255,255,255,.35);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .brand-name { font-size:17px; font-weight:700; color:#fff; letter-spacing:.02em; }
+  .brand-sub  { font-size:11px; color:rgba(255,255,255,.42); margin-top:2px; letter-spacing:.04em; }
+  .nav-label {
+    position:relative; font-size:11px; letter-spacing:.22em; color:rgba(255,255,255,.34);
+    padding:10px 22px 8px;
+  }
+  nav { position:relative; padding:0 12px; display:flex; flex-direction:column; gap:3px; }
+  .nav-item {
+    height:41px; display:flex; align-items:center; gap:11px; padding:0 12px;
+    border-radius:10px; color:#b3b7de; font-size:13.5px; border:1px solid transparent;
+    position:relative;
+  }
+  .nav-item svg { opacity:.85; }
+  .nav-item.active {
+    color:#fff; font-weight:600;
+    background:linear-gradient(90deg,rgba(99,102,241,.34),rgba(34,211,238,.10));
+    border:1px solid rgba(129,140,248,.42);
+    box-shadow:0 6px 18px rgba(99,102,241,.28);
+  }
+  .nav-item.active::before {
+    content:""; position:absolute; left:-1px; top:9px; bottom:9px; width:3px; border-radius:2px;
+    background:linear-gradient(180deg,#818cf8,#22d3ee);
+  }
+  .nav-item.active svg { opacity:1; color:#c7d2fe; }
+  .side-footer { margin-top:auto; position:relative; padding:14px 12px 16px; }
+  .side-footer::before { content:""; display:block; height:1px; margin:0 8px 12px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent); }
+  .about-btn {
+    width:100%; height:38px; border-radius:10px; border:1px solid rgba(255,255,255,.09);
+    background:rgba(255,255,255,.05); color:#c6c9e6; font-size:13px; font-family:inherit;
+    display:flex; align-items:center; justify-content:center; gap:8px; cursor:default;
+  }
+
+  /* ============ 主区 ============ */
+  main { flex:1; min-width:0; display:flex; flex-direction:column; }
+  header {
+    height:72px; flex:none; display:flex; align-items:center; justify-content:space-between;
+    padding:0 28px;
+  }
+  header h1 { font-size:21px; font-weight:700; color:#191c31; letter-spacing:.01em; }
+  header .desc { font-size:12.5px; color:#8b90a6; margin-top:4px; }
+  .chip-ready {
+    display:flex; align-items:center; gap:8px; height:32px; padding:0 14px; border-radius:999px;
+    background:rgba(16,185,129,.10); border:1px solid rgba(16,185,129,.28);
+    color:#0b9e6c; font-size:12.5px; font-weight:600;
+  }
+  .chip-ready .dot { width:7px; height:7px; border-radius:50%; background:#10b981;
+    box-shadow:0 0 0 3px rgba(16,185,129,.18); }
+
+  .content { flex:1; min-height:0; display:flex; gap:20px; padding:18px 28px 26px; }
+  .col-left { flex:1; min-width:0; display:flex; flex-direction:column; gap:15px; }
+
+  .card {
+    background:#fff; border:1px solid #e7e9f3; border-radius:16px;
+    box-shadow:0 1px 2px rgba(20,22,43,.04), 0 10px 28px rgba(20,22,43,.05);
+  }
+  .card-head { display:flex; align-items:center; justify-content:space-between; }
+  .card-title { font-size:15px; font-weight:700; color:#23263d; }
+  .card-hint { font-size:12px; color:#a2a7bd; }
+
+  /* ---- 输入 ---- */
+  .input-card { padding:15px 18px 17px; }
+  .input-card .card-head { margin-bottom:13px; }
+  .seg {
+    display:flex; gap:2px; background:#eef0f7; border-radius:999px; padding:3px;
+  }
+  .seg-item {
+    padding:5px 14px; border-radius:999px; font-size:12.5px; color:#7b8098; white-space:nowrap;
+  }
+  .seg-item.active {
+    background:#fff; color:#4338ca; font-weight:600;
+    box-shadow:0 2px 6px rgba(20,22,43,.10);
+  }
+  .input-row { display:flex; gap:10px; }
+  .path-field {
+    flex:1; min-width:0; height:40px; display:flex; align-items:center; gap:9px; padding:0 13px;
+    background:#f8f9fd; border:1px solid #e6e8f2; border-radius:10px;
+    color:#3a3e55; font-size:13.5px;
+  }
+  .path-field .ellip { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .btn-soft {
+    height:40px; padding:0 20px; border:none; border-radius:10px; flex:none;
+    background:#eef0fd; color:#4f46e5; font-size:13.5px; font-weight:600; font-family:inherit;
+  }
+
+  /* ---- 参数 ---- */
+  .param-card { padding:15px 18px 16px; }
+  .param-card .card-head { margin-bottom:14px; }
+  .param-grid { display:grid; grid-template-columns:1fr 1fr; column-gap:16px; row-gap:14px; }
+  .field label {
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-size:12.5px; color:#7b8098; margin-bottom:7px; font-weight:600;
+  }
+  .label-hint { font-size:11.5px; color:#a2a7bd; font-weight:400; }
+  .select {
+    height:40px; display:flex; align-items:center; justify-content:space-between; padding:0 13px;
+    background:#f8f9fd; border:1px solid #e6e8f2; border-radius:10px;
+    color:#2a2e45; font-size:13.5px;
+  }
+  .seg-fmt { width:100%; }
+  .seg-fmt .seg-item { flex:1; text-align:center; padding:8px 0; font-size:13px; }
+  .field-wide { grid-column:1 / -1; }
+  .volume-row { display:flex; align-items:center; gap:14px; }
+  .slider-wrap { flex:1; min-width:0; }
+  .slider-row { display:flex; align-items:center; height:24px; }
+  .slider { position:relative; flex:1; height:6px; border-radius:3px; background:#e8eaf4; }
+  .slider .fill {
+    position:absolute; left:0; top:0; bottom:0; width:50%; border-radius:3px;
+    background:linear-gradient(90deg,#6366f1,#22d3ee);
+  }
+  .slider .thumb {
+    position:absolute; left:50%; top:50%; width:18px; height:18px; border-radius:50%;
+    transform:translate(-50%,-50%);
+    background:#fff; border:2px solid #6366f1;
+    box-shadow:0 2px 8px rgba(99,102,241,.4);
+  }
+  .slider-val {
+    flex:none; min-width:44px; text-align:center; padding:3px 0; border-radius:8px;
+    background:#eef0fd; color:#4338ca; font-size:13px; font-weight:700;
+    font-variant-numeric:tabular-nums;
+  }
+  .ticks { display:flex; justify-content:space-between; margin-top:3px;
+    font-size:10.5px; color:#b6bacd; }
+
+  /* ---- 进度 + 按钮 ---- */
+  .progress-card {
+    display:flex; align-items:center; gap:14px; padding:13px 16px;
+  }
+  .state-icon {
+    width:34px; height:34px; flex:none; border-radius:50%;
+    background:rgba(16,185,129,.12); color:#0b9e6c;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .progress-main { flex:1; min-width:0; }
+  .progress-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:7px; }
+  .progress-text { font-size:13px; font-weight:600; color:#2a2e45; }
+  .progress-pct { font-size:12.5px; font-weight:700; color:#4f46e5; font-variant-numeric:tabular-nums; }
+  .bar { height:8px; border-radius:4px; background:#e8eaf4; overflow:hidden; }
+  .bar-fill {
+    height:100%; width:100%; border-radius:4px;
+    background:linear-gradient(90deg,#6366f1 0%,#8b5cf6 55%,#22d3ee 110%);
+  }
+  .btn-primary {
+    height:40px; padding:0 24px; border:none; border-radius:10px; flex:none;
+    display:flex; align-items:center; gap:8px;
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+    color:#fff; font-size:14px; font-weight:700; font-family:inherit; letter-spacing:.06em;
+    box-shadow:0 6px 16px rgba(109,88,246,.38), inset 0 1px 0 rgba(255,255,255,.28);
+  }
+  .btn-ghost {
+    height:40px; padding:0 20px; border-radius:10px; flex:none;
+    border:1px solid #e2e4ef; background:#fff; color:#6d7288;
+    font-size:13.5px; font-family:inherit;
+  }
+  .btn-ghost[disabled] { opacity:.5; }
+
+  /* ---- 结果清单 ---- */
+  .results-card { flex:1; min-height:0; display:flex; flex-direction:column; padding:14px 18px 12px; }
+  .results-card .card-head { margin-bottom:6px; }
+  .btn-ghost-sm {
+    height:29px; padding:0 12px; border-radius:8px; border:1px solid #e2e4ef; background:#fff;
+    color:#6d7288; font-size:12px; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
+  }
+  table { width:100%; border-collapse:collapse; }
+  thead th {
+    text-align:left; font-size:11.5px; font-weight:600; color:#9aa0b8; letter-spacing:.05em;
+    padding:7px 10px 8px; border-bottom:1px solid #eef0f7;
+  }
+  tbody td {
+    font-size:13px; color:#2a2e45; padding:10px; border-bottom:1px solid #f4f5fa; vertical-align:middle;
+  }
+  .file-cell { display:flex; align-items:center; gap:8px; }
+  .file-cell svg { flex:none; color:#a2a7bd; }
+  .ellip { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:0; }
+  td.ellip, .file-cell .ellip { max-width:180px; }
+  .pill {
+    display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:999px;
+    font-size:12px; font-weight:600;
+  }
+  .pill .pdot { width:6px; height:6px; border-radius:50%; }
+  .pill.ok { background:#e7f9f0; color:#0b9e6c; } .pill.ok .pdot { background:#10b981; }
+  .results-empty {
+    flex:1; min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:7px; color:#c3c7d8; text-align:center;
+  }
+  .results-empty .big { color:#e3e6f0; margin-bottom:2px; }
+  .results-empty .t1 { font-size:12.5px; color:#a9aec2; }
+  .results-empty .t2 { font-size:11px; color:#c3c7d8; }
+  .results-foot { padding-top:9px; border-top:1px solid #f4f5fa; font-size:11.5px; color:#b6bacd; }
+
+  /* ---- 媒体信息 ---- */
+  .info-card {
+    width:374px; flex:none; display:flex; flex-direction:column; padding:15px 18px 14px;
+    overflow:hidden;
+  }
+  .info-card .card-head { margin-bottom:6px; }
+  .info-body { flex:1; min-height:0; display:flex; flex-direction:column; justify-content:space-evenly; }
+  .icon-btn {
+    width:29px; height:29px; border-radius:8px; border:1px solid #e2e4ef; background:#fff;
+    color:#7b8098; display:flex; align-items:center; justify-content:center;
+  }
+  .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .stat { background:#f6f7fc; border-radius:12px; padding:10px 12px 9px; }
+  .stat .k { font-size:11px; color:#9aa0b8; margin-bottom:3px; }
+  .stat .v { font-size:14.5px; font-weight:700; color:#23263d; font-variant-numeric:tabular-nums; }
+  .codec-row {
+    display:flex; align-items:center; gap:8px; padding-bottom:12px; border-bottom:1px solid #f0f1f7;
+  }
+  .codec-row .k { font-size:12.5px; color:#7b8098; font-weight:600; }
+  .badge {
+    font-size:11.5px; font-weight:700; padding:3px 10px; border-radius:7px; letter-spacing:.02em;
+  }
+  .badge.violet { background:#efeffe; color:#6355e8; }
+  .badge.plain  { background:#f0f1f8; color:#7b8098; }
+  .sec { padding-top:11px; border-top:1px solid #f0f1f7; }
+  .sec-head {
+    display:flex; align-items:center; gap:7px; font-size:12px; font-weight:700; color:#9aa0b8;
+    letter-spacing:.08em; margin-bottom:8px;
+  }
+  .count {
+    font-size:10.5px; font-weight:700; background:#eef0fa; color:#6b70a0;
+    border-radius:999px; padding:1px 7px; letter-spacing:0;
+  }
+  .trk { display:flex; align-items:center; gap:10px; padding:5px 0; }
+  .trk-num {
+    width:21px; height:21px; flex:none; border-radius:50%; background:#eceffe; color:#4f46e5;
+    font-size:11.5px; font-weight:700; display:flex; align-items:center; justify-content:center;
+  }
+  .trk-name { font-size:13px; color:#2a2e45; font-weight:600; }
+  .trk-sub  { font-size:12px; color:#9aa0b8; margin-left:2px; }
+  .trk-right { margin-left:auto; display:flex; gap:6px; }
+  .mini {
+    font-size:11px; font-weight:600; padding:2px 8px; border-radius:6px;
+    background:#f0f1f8; color:#7b8098;
+  }
+  .mini.blue  { background:#e8f1fe; color:#3b82f6; }
+  .mini.amber { background:#fdf3e3; color:#d97706; }
+  .chap { display:flex; align-items:center; gap:9px; padding:4px 0; }
+  .chap-time {
+    font-family:"Cascadia Mono",Consolas,monospace; font-size:11px; color:#5b5f7a;
+    background:#f0f1f8; border-radius:6px; padding:3px 7px; font-variant-numeric:tabular-nums;
+  }
+  .chap-title { font-size:12.5px; color:#3a3e55; }
+</style>
+</head>
+<body>
+
+<!-- ================= 侧边栏 ================= -->
+<aside class="sidebar">
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+
+  <div class="brand">
+    <div class="logo">
+      <svg width="17" height="17" viewBox="0 0 24 24"><path d="M8 5.4v13.2c0 .9 1 1.5 1.8 1L19.9 13a1.2 1.2 0 0 0 0-2L9.8 4.4A1.2 1.2 0 0 0 8 5.4Z" fill="#fff"/></svg>
+    </div>
+    <div>
+      <div class="brand-name">媒体小工具</div>
+      <div class="brand-sub">MediaTool · v1.0.0</div>
+    </div>
+  </div>
+
+  <div class="nav-label">功能</div>
+  <nav>
+    <div class="nav-item">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.2"/><path d="M12 16.2v-4.4"/><path d="M12 7.8h.01"/></svg>
+      媒体信息
+    </div>
+    <div class="nav-item active">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18.2V5.8l11-2.1v12.4"/><circle cx="6.2" cy="18.2" r="2.8"/><circle cx="17.2" cy="16.1" r="2.8"/></svg>
+      提取音频
+    </div>
+    <div class="nav-item">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2.8" y="4.5" width="18.4" height="15" rx="2.4"/><path d="M6.4 11.2h3.8M13.8 11.2h3.8M6.4 15.2h2.2M11.4 15.2h6.2"/></svg>
+      提取字幕
+    </div>
+    <div class="nav-item">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.4v10.4"/><path d="m8.2 10.2 3.8 3.8 3.8-3.8"/><path d="M4.4 16.6v1.9a2.5 2.5 0 0 0 2.5 2.5h10.2a2.5 2.5 0 0 0 2.5-2.5v-1.9"/></svg>
+      封装字幕
+    </div>
+    <div class="nav-item">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6.2" r="2.7"/><circle cx="6" cy="17.8" r="2.7"/><path d="M19.8 4.4 8.3 15.7"/><path d="m14.6 14.4 5.2 5.2"/><path d="M8.3 8.3 12 12"/></svg>
+      裁剪
+    </div>
+    <div class="nav-item">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8.2 6.4 3.8-3.8 3.8 3.8"/><path d="M12 2.6v9.9a3.8 3.8 0 0 1-1.1 2.7L4.4 21.4"/><path d="m19.6 21.4-4.8-4.8"/></svg>
+      合并
+    </div>
+    <div class="nav-item">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 12a8.8 8.8 0 0 1 15-6.2l2.4 2.4"/><path d="M20.6 3.4v4.8h-4.8"/><path d="M20.8 12a8.8 8.8 0 0 1-15 6.2l-2.4-2.4"/><path d="M3.4 20.6v-4.8h4.8"/></svg>
+      换容器或压缩
+    </div>
+    <div class="nav-item">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 21v-6.4M5 10.6V3M12 21v-8.4M12 8.6V3M19 21v-4.4M19 12.6V3"/><path d="M2.8 14.6h4.4M9.8 8.6h4.4M16.8 16.6h4.4"/></svg>
+      音轨
+    </div>
+  </nav>
+
+  <div class="side-footer">
+    <button class="about-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.2"/><path d="M12 16.2v-4.4"/><path d="M12 7.8h.01"/></svg>
+      关于
+    </button>
+  </div>
+</aside>
+
+<!-- ================= 主区 ================= -->
+<main>
+  <header>
+    <div>
+      <h1>提取音频</h1>
+      <div class="desc">从视频中抽出所选音轨，按固定质量保存为 MP3、M4A、WAV 或 FLAC</div>
+    </div>
+    <div class="chip-ready"><span class="dot"></span>编码器就绪 · NVIDIA NVENC</div>
+  </header>
+
+  <div class="content">
+    <section class="col-left">
+
+      <!-- 输入 -->
+      <div class="card input-card">
+        <div class="card-head">
+          <span class="card-title">输入</span>
+          <div class="seg">
+            <span class="seg-item active">单个视频</span>
+            <span class="seg-item">文件夹</span>
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="path-field">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:#a2a7bd;flex:none"><rect x="2.8" y="3.2" width="18.4" height="17.6" rx="2.4"/><path d="M7.4 3.2v17.6M16.6 3.2v17.6M2.8 8h4.6M2.8 16h4.6M16.6 8h4.6M16.6 16h4.6"/></svg>
+            <span class="ellip">D:\视频\旅行纪录片.mkv</span>
+          </div>
+          <button class="btn-soft">浏览</button>
+        </div>
+      </div>
+
+      <!-- 参数 -->
+      <div class="card param-card">
+        <div class="card-head">
+          <span class="card-title">参数</span>
+          <span class="card-hint">输出写在源文件旁边，不修改源文件</span>
+        </div>
+        <div class="param-grid">
+          <div class="field">
+            <label>音轨</label>
+            <div class="select">
+              <span>第 1 路 · aac · 2 声道 · chi</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#a2a7bd"><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/></svg>
+            </div>
+          </div>
+          <div class="field">
+            <label>格式</label>
+            <div class="seg seg-fmt">
+              <span class="seg-item active">MP3</span>
+              <span class="seg-item">M4A</span>
+              <span class="seg-item">WAV</span>
+              <span class="seg-item">FLAC</span>
+            </div>
+          </div>
+          <div class="field field-wide">
+            <label>音量 <span class="label-hint">0 表示保留一条静音音轨</span></label>
+            <div class="volume-row">
+              <div class="slider-wrap">
+                <div class="slider-row">
+                  <div class="slider">
+                    <div class="fill"></div>
+                    <div class="thumb"></div>
+                  </div>
+                </div>
+                <div class="ticks"><span>0</span><span>100</span><span>200</span></div>
+              </div>
+              <span class="slider-val">100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 进度 + 操作 -->
+      <div class="card progress-card">
+        <div class="state-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4.8 12.6 4.6 4.6L19.2 7"/></svg>
+        </div>
+        <div class="progress-main">
+          <div class="progress-top">
+            <span class="progress-text">已完成</span>
+            <span class="progress-pct">100%</span>
+          </div>
+          <div class="bar"><div class="bar-fill"></div></div>
+        </div>
+        <button class="btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24"><path d="M8 5.4v13.2c0 .9 1 1.5 1.8 1L19.9 13a1.2 1.2 0 0 0 0-2L9.8 4.4A1.2 1.2 0 0 0 8 5.4Z" fill="#fff"/></svg>
+          开始
+        </button>
+        <button class="btn-ghost" disabled>取消</button>
+      </div>
+
+      <!-- 结果清单 -->
+      <div class="card results-card">
+        <div class="card-head">
+          <span class="card-title">结果清单</span>
+          <button class="btn-ghost-sm">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8.6" y="8.6" width="12" height="12" rx="2.2"/><path d="M15.4 3.4H5.9a2.5 2.5 0 0 0-2.5 2.5v9.5"/></svg>
+            复制清单
+          </button>
+        </div>
+        <table>
+          <thead>
+            <tr><th style="width:34%">文件</th><th style="width:13%">结果</th><th style="width:18%">说明</th><th>输出</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="file-cell">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.8" y="3.2" width="18.4" height="17.6" rx="2.4"/><path d="M7.4 3.2v17.6M16.6 3.2v17.6M2.8 8h4.6M2.8 16h4.6M16.6 8h4.6M16.6 16h4.6"/></svg>
+                <span class="ellip">旅行纪录片.mkv</span>
+              </div></td>
+              <td><span class="pill ok"><span class="pdot"></span>成功</span></td>
+              <td>已完成</td>
+              <td class="ellip" style="color:#7b8098">D:\视频\旅行纪录片_audio (2).mp3</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="results-empty">
+          <svg class="big" width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8.2 3.6h5.4l4.8 4.8v10.2a1.9 1.9 0 0 1-1.9 1.9H8.2a1.9 1.9 0 0 1-1.9-1.9V5.5a1.9 1.9 0 0 1 1.9-1.9Z"/><path d="M13.2 3.6v5.2h5.2"/><path d="M9.6 13h5.6M9.6 16.4h5.6"/></svg>
+          <div class="t1">文件夹模式下，每个文件的处理结果会逐行列在这里</div>
+          <div class="t2">结果只有四种：成功、失败、已取消、未处理</div>
+        </div>
+        <div class="results-foot">重复执行同一操作时，输出文件名会自动追加序号，不覆盖已有文件</div>
+      </div>
+    </section>
+
+    <!-- 媒体信息 -->
+    <aside class="card info-card">
+      <div class="card-head">
+        <span class="card-title">媒体信息</span>
+        <button class="icon-btn" title="复制信息">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8.6" y="8.6" width="12" height="12" rx="2.2"/><path d="M15.4 3.4H5.9a2.5 2.5 0 0 0-2.5 2.5v9.5"/></svg>
+        </button>
+      </div>
+
+      <div class="info-body">
+        <div class="stat-grid">
+          <div class="stat"><div class="k">时长</div><div class="v">00:42:18.500</div></div>
+          <div class="stat"><div class="k">分辨率</div><div class="v">3840×2160</div></div>
+          <div class="stat"><div class="k">帧率</div><div class="v">23.976</div></div>
+          <div class="stat"><div class="k">视频码率</div><div class="v">15240 kbps</div></div>
+        </div>
+
+        <div class="codec-row">
+          <span class="k">视频编码</span>
+          <span class="badge violet">hevc</span>
+          <span class="badge plain">yuv420p</span>
+        </div>
+
+        <div class="sec">
+          <div class="sec-head">音轨 <span class="count">2</span></div>
+          <div class="trk">
+            <span class="trk-num">1</span>
+            <span class="trk-name">aac</span><span class="trk-sub">2 声道</span>
+            <span class="trk-right"><span class="mini">chi</span></span>
+          </div>
+          <div class="trk">
+            <span class="trk-num">2</span>
+            <span class="trk-name">ac3</span><span class="trk-sub">6 声道</span>
+            <span class="trk-right"><span class="mini">eng</span></span>
+          </div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-head">字幕 <span class="count">2</span></div>
+          <div class="trk">
+            <span class="trk-num">1</span>
+            <span class="trk-name">subrip</span>
+            <span class="trk-right"><span class="mini blue">文本</span><span class="mini">chi</span></span>
+          </div>
+          <div class="trk">
+            <span class="trk-num">2</span>
+            <span class="trk-name">hdmv_pgs_subtitle</span>
+            <span class="trk-right"><span class="mini amber">图像</span><span class="mini">eng</span></span>
+          </div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-head">章节 <span class="count">4</span></div>
+          <div class="chap"><span class="chap-time">00:00:00.000</span><span class="chap-title">开场</span></div>
+          <div class="chap"><span class="chap-time">00:12:30.000</span><span class="chap-title">翻越垭口</span></div>
+          <div class="chap"><span class="chap-time">00:28:45.000</span><span class="chap-title">湖边营地</span></div>
+          <div class="chap"><span class="chap-time">00:40:52.000</span><span class="chap-title">尾声</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+</body>
+</html>

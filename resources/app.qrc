@@ -1,0 +1,8 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+  <qresource prefix="/">
+    <file alias="icons/app.png">app.png</file>
+    <file alias="icons/radio-off.png">radio-off.png</file>
+    <file alias="icons/radio-on.png">radio-on.png</file>
+  </qresource>
+</RCC>

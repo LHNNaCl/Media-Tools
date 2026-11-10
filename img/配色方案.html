@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>媒体小工具 · 配色方案</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"Microsoft YaHei UI","Microsoft YaHei","Segoe UI",sans-serif; }
+  svg { display:block; }
+  .mock { width:1280px; height:800px; overflow:hidden; display:flex; position:relative; }
+
+  /* ---------- 侧边栏 ---------- */
+  .side {
+    width:200px; flex:none; height:800px; display:flex; flex-direction:column;
+    background:var(--side); border-right:1px solid var(--side-brd);
+  }
+  .navlab { font-size:11px; letter-spacing:3px; color:var(--navlab); padding:18px 22px 8px; }
+  nav { padding:0 10px; display:flex; flex-direction:column; gap:3px; }
+  .ni {
+    height:41px; display:flex; align-items:center; gap:11px; padding:0 12px;
+    border-radius:10px; color:var(--nav); font-size:13.5px; border:1px solid transparent;
+  }
+  .ni svg { flex:none; }
+  .ni.on {
+    color:var(--nav-act); font-weight:600;
+    background:var(--nav-act-bg); border-color:var(--nav-act-brd);
+  }
+  .sidefoot { margin-top:auto; padding:10px 10px 14px; }
+  .about {
+    width:100%; height:30px; border-radius:8px; font-size:12.5px; font-family:inherit;
+    background:var(--about-bg); color:var(--about-text); border:1px solid var(--about-brd);
+  }
+
+  /* ---------- 主区 ---------- */
+  .main { flex:1; min-width:0; background:var(--page); display:flex; flex-direction:column; }
+  header { padding:14px 20px 0; display:flex; justify-content:space-between; align-items:flex-start; }
+  h1 { font-size:18px; color:var(--ink); }
+  .desc { font-size:11.5px; color:var(--muted); margin-top:4px; }
+  .chip {
+    display:flex; align-items:center; gap:7px; font-size:11.5px; font-weight:600; white-space:nowrap;
+    color:var(--chip-text); background:var(--chip-bg); border:1px solid var(--chip-brd);
+    border-radius:999px; padding:4px 12px;
+  }
+  .chip .dot { width:6px; height:6px; border-radius:50%; background:var(--ok); }
+  .content { flex:1; min-height:0; display:flex; gap:14px; padding:12px 20px 16px; }
+  .left { flex:1; min-width:0; display:flex; flex-direction:column; gap:10px; }
+
+  .card {
+    background:var(--card); border:1px solid var(--card-brd); border-radius:14px;
+  }
+  .chead { display:flex; align-items:center; justify-content:space-between; }
+  .chead b { font-size:14px; color:var(--ink); }
+  .hint { font-size:11px; color:var(--faint); }
+
+  .input { padding:12px 14px; }
+  .input .chead { margin-bottom:10px; }
+  .irow { display:flex; gap:10px; }
+  .field {
+    flex:1; min-width:0; height:32px; display:flex; align-items:center; gap:9px; padding:0 12px;
+    background:var(--field-bg); border:1px solid var(--field-brd); border-radius:8px;
+    color:var(--ink); font-size:13px;
+  }
+  .field .ellip { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .field svg { color:var(--faint); flex:none; }
+  .soft {
+    height:32px; padding:0 16px; border:none; border-radius:8px; flex:none; cursor:default;
+    background:var(--soft-bg); color:var(--soft-text); font-size:13px; font-weight:600; font-family:inherit;
+  }
+
+  .param { padding:12px 14px; }
+  .param .chead { margin-bottom:10px; }
+  .prow { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .prow:last-child { margin-bottom:0; }
+  .prow > label { width:40px; flex:none; font-size:12.5px; color:var(--muted); font-weight:600; }
+  .sel { justify-content:space-between; }
+  .seg {
+    display:flex; gap:2px; background:var(--seg-bg); border-radius:12px; padding:3px;
+  }
+  .seg span { padding:4px 12px; border-radius:9px; font-size:12px; color:var(--muted); white-space:nowrap; }
+  .seg span.on { background:var(--card); color:var(--soft-text); font-weight:600; }
+  .seg.fmt { flex:1; }
+  .seg.fmt span { flex:1; text-align:center; padding:5px 0; }
+  .vol { flex:1; display:flex; align-items:center; gap:12px; }
+  .slider { position:relative; flex:1; height:6px; border-radius:3px; background:var(--track); }
+  .slider .fill { position:absolute; left:0; top:0; bottom:0; width:50%; border-radius:3px; background:var(--accent); }
+  .slider .thumb {
+    position:absolute; left:50%; top:50%; width:10px; height:14px; border-radius:3px;
+    transform:translate(-50%,-50%); background:var(--accent);
+  }
+  .vval {
+    flex:none; min-width:40px; text-align:center; padding:3px 0; border-radius:6px;
+    background:var(--soft-bg); color:var(--soft-text); font-size:12px; font-weight:700;
+  }
+
+  .prog { display:flex; align-items:center; gap:10px; padding:10px 12px; }
+  .okic {
+    width:28px; height:28px; flex:none; border-radius:50%;
+    background:var(--soft-bg); color:var(--accent);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pmain { flex:1; min-width:0; }
+  .ptop { display:flex; justify-content:space-between; margin-bottom:6px; }
+  .ptext { font-size:12.5px; font-weight:600; color:var(--ink); }
+  .ppct { font-size:12px; font-weight:700; color:var(--accent); }
+  .bar { height:8px; border-radius:4px; background:var(--track); overflow:hidden; }
+  .bfill { height:100%; width:100%; border-radius:4px; background:var(--accent); }
+  .primary {
+    height:28px; padding:0 18px; border:none; border-radius:8px; flex:none; cursor:default;
+    background:var(--accent); color:var(--on-accent); font-size:13px; font-weight:700; font-family:inherit;
+  }
+  .ghost {
+    height:28px; padding:0 14px; border-radius:8px; flex:none; cursor:default;
+    background:var(--card); color:var(--muted); border:1px solid var(--card-brd);
+    font-size:13px; font-family:inherit;
+  }
+  .ghost.dis { opacity:.5; }
+
+  .results { flex:1; min-height:0; display:flex; flex-direction:column; padding:10px 14px; }
+  .results .chead { margin-bottom:4px; }
+  .ghost.sm { height:24px; padding:0 10px; font-size:11.5px; display:flex; align-items:center; gap:5px; }
+  table { width:100%; border-collapse:collapse; }
+  th {
+    text-align:left; font-size:11px; font-weight:600; color:var(--faint);
+    padding:6px 8px; border-bottom:1px solid var(--card-brd);
+  }
+  td { font-size:12.5px; color:var(--ink); padding:8px; border-bottom:1px solid var(--card-brd); }
+  .pill {
+    display:inline-flex; align-items:center; gap:5px; padding:2px 9px; border-radius:999px;
+    font-size:11px; font-weight:600; background:var(--okbg); color:var(--ok);
+  }
+  .pill i { width:5px; height:5px; border-radius:50%; background:var(--ok); }
+  .rfoot { margin-top:auto; padding-top:8px; font-size:11px; color:var(--faint); }
+
+  /* ---------- 媒体信息 ---------- */
+  .info { width:280px; flex:none; padding:12px 14px; display:flex; flex-direction:column; }
+  .info .chead { margin-bottom:10px; }
+  .stats { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+  .stat { background:var(--stat-bg); border-radius:10px; padding:8px 10px 7px; }
+  .stat .k { font-size:10.5px; color:var(--faint); margin-bottom:2px; }
+  .stat .v { font-size:13px; font-weight:700; color:var(--ink); }
+  .codec { display:flex; align-items:center; gap:7px; padding-bottom:10px; border-bottom:1px solid var(--card-brd); }
+  .codec .k { font-size:12px; color:var(--muted); font-weight:600; }
+  .bdg { font-size:11px; font-weight:700; padding:2px 8px; border-radius:6px; background:var(--soft-bg); color:var(--soft-text); }
+  .bdg.plain { background:var(--stat-bg); color:var(--muted); }
+  .sec { padding-top:9px; border-top:1px solid var(--card-brd); margin-top:9px; }
+  .sec-h { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700; color:var(--faint); letter-spacing:1px; margin-bottom:6px; }
+  .cnt { font-size:10px; background:var(--stat-bg); color:var(--muted); border-radius:999px; padding:1px 6px; }
+  .trk { display:flex; align-items:center; gap:8px; padding:4px 0; }
+  .tn { width:18px; height:18px; flex:none; border-radius:50%; background:var(--soft-bg); color:var(--soft-text);
+        font-size:10.5px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  .trk .nm { font-size:12.5px; color:var(--ink); font-weight:600; }
+  .trk .sb { font-size:11px; color:var(--faint); }
+  .trk .rt { margin-left:auto; display:flex; gap:5px; }
+  .mini { font-size:10.5px; font-weight:600; padding:1px 7px; border-radius:5px; background:var(--stat-bg); color:var(--muted); }
+  .mini.acc { background:var(--soft-bg); color:var(--soft-text); }
+  .chap { display:flex; align-items:center; gap:8px; padding:3px 0; }
+  .ct { font-family:Consolas,monospace; font-size:10.5px; color:var(--muted); background:var(--stat-bg); border-radius:5px; padding:2px 6px; }
+  .ctt { font-size:12px; color:var(--ink); }
+
+  .tag {
+    position:absolute; right:14px; bottom:10px; font-size:11px; font-weight:700; letter-spacing:1px;
+    color:var(--faint);
+  }
+</style>
+</head>
+<body>
+<script>
+const ICONS = {
+  info:  '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.2"/><path d="M12 16.2v-4.4"/><path d="M12 7.8h.01"/></svg>',
+  music: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18.2V5.8l11-2.1v12.4"/><circle cx="6.2" cy="18.2" r="2.8"/><circle cx="17.2" cy="16.1" r="2.8"/></svg>',
+  subs:  '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2.8" y="4.5" width="18.4" height="15" rx="2.4"/><path d="M6.4 11.2h3.8M13.8 11.2h3.8M6.4 15.2h2.2M11.4 15.2h6.2"/></svg>',
+  mux:   '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.4v10.4"/><path d="m8.2 10.2 3.8 3.8 3.8-3.8"/><path d="M4.4 16.6v1.9a2.5 2.5 0 0 0 2.5 2.5h10.2a2.5 2.5 0 0 0 2.5-2.5v-1.9"/></svg>',
+  cut:   '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6.2" r="2.7"/><circle cx="6" cy="17.8" r="2.7"/><path d="M19.8 4.4 8.3 15.7"/><path d="m14.6 14.4 5.2 5.2"/><path d="M8.3 8.3 12 12"/></svg>',
+  merge: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8.2 6.4 3.8-3.8 3.8 3.8"/><path d="M12 2.6v9.9a3.8 3.8 0 0 1-1.1 2.7L4.4 21.4"/><path d="m19.6 21.4-4.8-4.8"/></svg>',
+  conv:  '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 12a8.8 8.8 0 0 1 15-6.2l2.4 2.4"/><path d="M20.6 3.4v4.8h-4.8"/><path d="M20.8 12a8.8 8.8 0 0 1-15 6.2l-2.4-2.4"/><path d="M3.4 20.6v-4.8h4.8"/></svg>',
+  track: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 21v-6.4M5 10.6V3M12 21v-8.4M12 8.6V3M19 21v-4.4M19 12.6V3"/><path d="M2.8 14.6h4.4M9.8 8.6h4.4M16.8 16.6h4.4"/></svg>',
+  film:  '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.8" y="3.2" width="18.4" height="17.6" rx="2.4"/><path d="M7.4 3.2v17.6M16.6 3.2v17.6M2.8 8h4.6M2.8 16h4.6M16.6 8h4.6M16.6 16h4.6"/></svg>',
+  copy:  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8.6" y="8.6" width="12" height="12" rx="2.2"/><path d="M15.4 3.4H5.9a2.5 2.5 0 0 0-2.5 2.5v9.5"/></svg>',
+  check: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4.8 12.6 4.6 4.6L19.2 7"/></svg>',
+  chev:  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/></svg>'
+};
+
+const NAV = [
+  ['info','媒体信息'], ['music','提取音频'], ['subs','提取字幕'], ['mux','封装字幕'],
+  ['cut','裁剪'], ['merge','合并'], ['conv','换容器或压缩'], ['track','音轨']
+];
+
+const PALETTES = [
+  { file:'03-雾蓝', tag:'方案 03 · 雾蓝', vars:{
+    '--page':'#eef1f6','--side':'#e6eaf2','--side-brd':'#dbe1ec','--navlab':'#7d8aa3','--nav':'#54637d',
+    '--nav-act-bg':'#ffffff','--nav-act-brd':'#dbe1ec','--nav-act':'#3d5a78',
+    '--about-bg':'#f4f7fb','--about-brd':'#d8dfeb','--about-text':'#4a6b8a',
+    '--card':'#ffffff','--card-brd':'#e1e6ef','--ink':'#2e3a4e','--muted':'#72809a','--faint':'#9aa7bd',
+    '--accent':'#4a6b8a','--on-accent':'#ffffff','--soft-bg':'#e4eaf3','--soft-text':'#4a6b8a',
+    '--field-bg':'#f7f9fc','--field-brd':'#dfe5ee','--seg-bg':'#e7ecf4','--track':'#dde3ec',
+    '--stat-bg':'#f4f7fa','--chip-bg':'#e9eef3','--chip-text':'#4a6b8a','--chip-brd':'#d3dde6',
+    '--ok':'#3f8f6f','--okbg':'#e4f0ea'
+  }},
+  { file:'04-暖沙', tag:'方案 04 · 暖沙', vars:{
+    '--page':'#f4f0e9','--side':'#ece6db','--side-brd':'#e2dacb','--navlab':'#968c78','--nav':'#6f6656',
+    '--nav-act-bg':'#faf7f0','--nav-act-brd':'#e0d8c7','--nav-act':'#5d6b8c',
+    '--about-bg':'#f7f3ea','--about-brd':'#e0d8c7','--about-text':'#5d6b8c',
+    '--card':'#fdfbf7','--card-brd':'#e7e0d3','--ink':'#4a453c','--muted':'#8a8172','--faint':'#aaa191',
+    '--accent':'#6d7a98','--on-accent':'#fbf9f4','--soft-bg':'#e8e5dd','--soft-text':'#5d6b8c',
+    '--field-bg':'#fbf8f1','--field-brd':'#e7e0d3','--seg-bg':'#ece6da','--track':'#e3dccc',
+    '--stat-bg':'#f6f2ea','--chip-bg':'#e5e8ef','--chip-text':'#5d6b8c','--chip-brd':'#d8dde8',
+    '--ok':'#7d9478','--okbg':'#ecefe5'
+  }},
+  { file:'05-墨青', tag:'方案 05 · 墨青', vars:{
+    '--page':'#eff3f2','--side':'#213739','--side-brd':'#1d3032','--navlab':'#6f8a86','--nav':'#9db5b1',
+    '--nav-act-bg':'#2f4a4d','--nav-act-brd':'#3d5c5f','--nav-act':'#eaf2f1',
+    '--about-bg':'#2a4446','--about-brd':'#3a5658','--about-text':'#b9cfcb',
+    '--card':'#ffffff','--card-brd':'#dfe7e4','--ink':'#26332f','--muted':'#6b7d77','--faint':'#93a49e',
+    '--accent':'#3e716b','--on-accent':'#f2f7f6','--soft-bg':'#e2ecea','--soft-text':'#38665f',
+    '--field-bg':'#f6f9f8','--field-brd':'#dde6e3','--seg-bg':'#e4ecea','--track':'#dce5e2',
+    '--stat-bg':'#f2f7f6','--chip-bg':'#e4eeec','--chip-text':'#3e716b','--chip-brd':'#d2e0dd',
+    '--ok':'#4a8f7d','--okbg':'#e2efeb'
+  }},
+  { file:'06-石墨', tag:'方案 06 · 石墨', vars:{
+    '--page':'#f3f3f1','--side':'#3a3a3e','--side-brd':'#313135','--navlab':'#85858c','--nav':'#b7b7be',
+    '--nav-act-bg':'#4a4a4f','--nav-act-brd':'#55555a','--nav-act':'#f2f2f3',
+    '--about-bg':'#454549','--about-brd':'#525257','--about-text':'#c9c9cf',
+    '--card':'#ffffff','--card-brd':'#e3e3df','--ink':'#333338','--muted':'#7c7c84','--faint':'#a0a0a6',
+    '--accent':'#5c6b80','--on-accent':'#ffffff','--soft-bg':'#e8eaed','--soft-text':'#4e596d',
+    '--field-bg':'#f8f8f6','--field-brd':'#e2e2de','--seg-bg':'#e9e9e6','--track':'#e0e0dc',
+    '--stat-bg':'#f5f5f3','--chip-bg':'#e8eaed','--chip-text':'#4e596d','--chip-brd':'#d9dce1',
+    '--ok':'#5f8a6d','--okbg':'#e6eee8'
+  }},
+  { file:'07-黛蓝', tag:'方案 07 · 黛蓝', vars:{
+    '--page':'#f1f1f7','--side':'#4b4f6e','--side-brd':'#424664','--navlab':'#9a9dbb','--nav':'#c3c6dd',
+    '--nav-act-bg':'#5c6084','--nav-act-brd':'#6a6e94','--nav-act':'#ffffff',
+    '--about-bg':'#565a7c','--about-brd':'#646896','--about-text':'#d5d7ea',
+    '--card':'#ffffff','--card-brd':'#e2e2ed','--ink':'#34364a','--muted':'#7c7e94','--faint':'#a0a2b5',
+    '--accent':'#6a6f9a','--on-accent':'#ffffff','--soft-bg':'#e8e9f3','--soft-text':'#60648c',
+    '--field-bg':'#f8f8fc','--field-brd':'#e1e1ec','--seg-bg':'#e9eaf3','--track':'#e0e1ec',
+    '--stat-bg':'#f5f5fa','--chip-bg':'#e8e9f3','--chip-text':'#60648c','--chip-brd':'#d8d9e8',
+    '--ok':'#5e9070','--okbg':'#e7efe9'
+  }}
+];
+
+function navHtml() {
+  return NAV.map(([icon, name], i) =>
+    `<div class="ni${i === 1 ? ' on' : ''}">${ICONS[icon]}<span>${name}</span></div>`).join('');
+}
+
+function mockHtml(p) {
+  const vars = Object.entries(p.vars).map(([k, v]) => `${k}:${v}`).join(';');
+  return `
+<section class="mock" style="${vars}">
+  <aside class="side">
+    <div class="navlab">功能</div>
+    <nav>${navHtml()}</nav>
+    <div class="sidefoot"><button class="about">关于</button></div>
+  </aside>
+  <div class="main">
+    <header>
+      <div><h1>提取音频</h1><p class="desc">从视频中抽出所选音轨，按固定质量保存为 MP3、M4A、WAV 或 FLAC</p></div>
+      <span class="chip"><span class="dot"></span>编码器就绪 · NVIDIA NVENC</span>
+    </header>
+    <div class="content">
+      <div class="left">
+        <div class="card input">
+          <div class="chead"><b>输入</b><div class="seg"><span class="on">单个视频</span><span>文件夹</span></div></div>
+          <div class="irow">
+            <div class="field">${ICONS.film}<span class="ellip">D:\\视频\\旅行纪录片.mkv</span></div>
+            <button class="soft">浏览</button>
+          </div>
+        </div>
+        <div class="card param">
+          <div class="chead"><b>参数</b><span class="hint">输出写在源文件旁边，不修改源文件</span></div>
+          <div class="prow"><label>音轨</label><div class="field sel">第 1 路 · aac · 2 声道 · chi${ICONS.chev}</div></div>
+          <div class="prow"><label>格式</label><div class="seg fmt"><span class="on">MP3</span><span>M4A</span><span>WAV</span><span>FLAC</span></div></div>
+          <div class="prow"><label>音量</label><div class="vol"><div class="slider"><div class="fill"></div><div class="thumb"></div></div><span class="vval">100</span></div></div>
+        </div>
+        <div class="card prog">
+          <span class="okic">${ICONS.check}</span>
+          <div class="pmain">
+            <div class="ptop"><span class="ptext">已完成</span><span class="ppct">100%</span></div>
+            <div class="bar"><div class="bfill"></div></div>
+          </div>
+          <button class="primary">开始</button>
+          <button class="ghost dis">取消</button>
+        </div>
+        <div class="card results">
+          <div class="chead"><b>结果清单</b><button class="ghost sm">${ICONS.copy}复制清单</button></div>
+          <table>
+            <tr><th style="width:32%">文件</th><th style="width:14%">结果</th><th style="width:16%">说明</th><th>输出</th></tr>
+            <tr>
+              <td>旅行纪录片.mkv</td>
+              <td><span class="pill"><i></i>成功</span></td>
+              <td>已完成</td>
+              <td style="color:var(--muted)">D:\\视频\\旅行纪录片_audio (2).mp3</td>
+            </tr>
+          </table>
+          <div class="rfoot">重复执行同一操作时，输出文件名会自动追加序号，不覆盖已有文件</div>
+        </div>
+      </div>
+      <aside class="card info">
+        <div class="chead"><b>媒体信息</b><button class="ghost sm">${ICONS.copy}复制信息</button></div>
+        <div class="stats">
+          <div class="stat"><div class="k">时长</div><div class="v">00:42:18.500</div></div>
+          <div class="stat"><div class="k">分辨率</div><div class="v">3840×2160</div></div>
+          <div class="stat"><div class="k">帧率</div><div class="v">23.976</div></div>
+          <div class="stat"><div class="k">视频码率</div><div class="v">15240 kbps</div></div>
+        </div>
+        <div class="codec"><span class="k">视频编码</span><span class="bdg">hevc</span><span class="bdg plain">yuv420p</span></div>
+        <div class="sec">
+          <div class="sec-h">音轨 <span class="cnt">2</span></div>
+          <div class="trk"><span class="tn">1</span><span class="nm">aac</span><span class="sb">2 声道</span><span class="rt"><span class="mini">chi</span></span></div>
+          <div class="trk"><span class="tn">2</span><span class="nm">ac3</span><span class="sb">6 声道</span><span class="rt"><span class="mini">eng</span></span></div>
+        </div>
+        <div class="sec">
+          <div class="sec-h">字幕 <span class="cnt">2</span></div>
+          <div class="trk"><span class="tn">1</span><span class="nm">subrip</span><span class="rt"><span class="mini acc">文本</span><span class="mini">chi</span></span></div>
+          <div class="trk"><span class="tn">2</span><span class="nm">hdmv_pgs_subtitle</span><span class="rt"><span class="mini acc">图像</span><span class="mini">eng</span></span></div>
+        </div>
+        <div class="sec">
+          <div class="sec-h">章节 <span class="cnt">4</span></div>
+          <div class="chap"><span class="ct">00:00:00.000</span><span class="ctt">开场</span></div>
+          <div class="chap"><span class="ct">00:12:30.000</span><span class="ctt">翻越垭口</span></div>
+          <div class="chap"><span class="ct">00:28:45.000</span><span class="ctt">湖边营地</span></div>
+          <div class="chap"><span class="ct">00:40:52.000</span><span class="ctt">尾声</span></div>
+        </div>
+      </aside>
+    </div>
+    <span class="tag">${p.tag}</span>
+  </div>
+</section>`;
+}
+
+document.body.innerHTML = PALETTES.map(mockHtml).join('');
+</script>
+</body>
+</html>

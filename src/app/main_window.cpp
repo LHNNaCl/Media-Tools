@@ -1407,12 +1407,15 @@ void MainWindow::setupTray() {
     tray_ = new QSystemTrayIcon(this);
     const QIcon icon = windowIcon().isNull() ? QIcon(":/icons/app.png") : windowIcon();
     tray_->setIcon(icon);
-    tray_->setToolTip("媒体小工具");
     tray_->setContextMenu(trayMenu_);
     connect(tray_, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason) {
         if (reason == QSystemTrayIcon::DoubleClick) showMainWindow();
     });
     tray_->show();
+    // Windows 11 drops a tooltip that was set before the icon is registered.
+    // A second update after show() is what the shell actually displays.
+    tray_->setToolTip(QString());
+    tray_->setToolTip(QString("媒体小工具 %1").arg(MEDIATOOL_VERSION));
 }
 
 void MainWindow::showMainWindow() {
